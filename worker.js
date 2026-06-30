@@ -1,29 +1,35 @@
 // worker.js
-// Este é o backend do projeto Olá, Nuvem.
-// Ele roda na Cloudflare, sem servidor para você administrar.
-// Quando alguém acessa a URL do Worker, esta função responde com um JSON.
 
 export default {
   async fetch(request) {
-    // Pega a hora atual no servidor, no fuso de São Paulo.
+
     const horaDoServidor = new Date().toLocaleString("pt-BR", {
       timeZone: "America/Sao_Paulo",
     });
 
-    // Monta a resposta.
+    const frases = [
+      "Hoje é um ótimo dia para aprender algo novo!",
+      "Persistência leva ao sucesso.",
+      "Nunca desista dos seus objetivos.",
+      "Cada desafio é uma oportunidade de crescer.",
+      "Pequenos passos levam a grandes conquistas."
+    ];
+
+    const fraseDoDia =
+      frases[Math.floor(Math.random() * frases.length)];
+
     const corpo = {
       mensagem: "Olá da nuvem!",
-      horaDoServidor: horaDoServidor,
+      horaDoServidor,
+      fraseDoDia
     };
 
-    // Devolve o JSON.
-    // O cabeçalho Access-Control-Allow-Origin libera a página do Pages
-    // a chamar este Worker. Sem ele, o navegador bloqueia por CORS.
     return new Response(JSON.stringify(corpo), {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         "Access-Control-Allow-Origin": "*",
       },
     });
+
   },
 };
